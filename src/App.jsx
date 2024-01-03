@@ -1,10 +1,17 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import DetailBusiness from "./pages/detail_business";
+import ListBusiness from "./pages/list_business";
 
 const App = () => {
   return (
-    <section className="w-screen h-full flex flex-col justify-center items-center">
-      <p>App</p>
-    </section>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<ListBusiness />} path="/" />
+        <Route element={<DetailBusiness />} path="/detail" />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
