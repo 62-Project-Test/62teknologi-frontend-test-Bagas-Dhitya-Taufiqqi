@@ -1,10 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 import DetailBusiness from "./pages/detail_business";
 import ListBusiness from "./pages/list_business";
 
 const App = () => {
+  axios.defaults.baseURL = "https://api.yelp.com/v3/businesses/";
+
   return (
     <BrowserRouter>
       <Routes>
