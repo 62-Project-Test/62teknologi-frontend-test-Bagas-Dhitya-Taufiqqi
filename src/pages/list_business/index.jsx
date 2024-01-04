@@ -32,11 +32,16 @@ const countries = [
 
 const ListBusiness = () => {
   const accessToken = import.meta.env.VITE_YELP_TOKEN;
+  const limit = 10;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const [business, setBusiness] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("Singapore");
 
-  const getBusiness = async (input = "") => {
+  const getBusiness = async (input = "", page = 1) => {
     try {
       setLoading(true);
 
@@ -55,7 +60,9 @@ const ListBusiness = () => {
       }
 
       const response = await axios.get(
-        `search?location=${filter}&term=${term}&sort_by=best_match&limit=10`,
+        `search?location=${filter}&term=${term}&sort_by=best_match&limit=${limit}&offset=${
+          (page - 1) * limit
+        }`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -63,6 +70,7 @@ const ListBusiness = () => {
         }
       );
       setBusiness(response?.data?.businesses);
+      setTotalPages(Math.ceil(response?.data?.total / limit));
     } catch (error) {
       console.log(error);
     } finally {
@@ -70,19 +78,22 @@ const ListBusiness = () => {
     }
   };
 
-  const handleSearch = (input) => {
-    getBusiness(input);
-  };
-
   const handleFilterChange = (value) => {
     setFilter(value);
     getBusiness();
   };
 
-  useEffect(() => {
-    getBusiness();
-  }, [filter]);
+  const handleSearch = (input) => {
+    getBusiness(input);
+  };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    getBusiness("", currentPage);
+  }, [filter, currentPage]);
   return (
     <section className="w-screen h-full flex flex-col justify-center items-center">
       <div className="absolute gap-x-7 top-0 h-20 w-full bg-white flex justify-center items-center mt-12 z-10 sticky">
@@ -96,7 +107,11 @@ const ListBusiness = () => {
           options={countries}
         />
         <div className="ml-20">
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
       <div className="relative my-40">
