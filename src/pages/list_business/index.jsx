@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Search from "../../components/Search";
@@ -32,6 +33,7 @@ const countries = [
 
 const ListBusiness = () => {
   const accessToken = import.meta.env.VITE_YELP_TOKEN;
+  const navigate = useNavigate();
   const limit = 10;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,6 +72,7 @@ const ListBusiness = () => {
         }
       );
       setBusiness(response?.data?.businesses);
+      console.log(response?.data?.businesses);
       setTotalPages(Math.ceil(response?.data?.total / limit));
     } catch (error) {
       console.log(error);
@@ -129,6 +132,13 @@ const ListBusiness = () => {
                   name={item?.name}
                   phone={item?.phone}
                   rating={item?.rating}
+                  onDetail={() =>
+                    navigate(`/detail/${item?.name}`, {
+                      state: {
+                        id: item?.id,
+                      },
+                    })
+                  }
                 />
               );
             })}
