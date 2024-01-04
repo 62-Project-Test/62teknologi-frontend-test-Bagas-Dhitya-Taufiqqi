@@ -1,30 +1,29 @@
-const Search = ({
-  searchTerm,
-  searchResults,
-  isLoading,
-  onSearchTermChange,
-}) => (
-  <div className="my-4">
-    <input
-      type="text"
-      placeholder="Search..."
-      className="p-2 border rounded"
-      value={searchTerm}
-      onChange={(e) => onSearchTermChange(e.target.value)}
-    />
-    {isLoading && <p className="text-gray-500">Loading...</p>}
-    {searchResults?.length > 0 && (
-      <ul className="mt-2">
-        {searchResults.map((result) => (
-          <li key={result.id}>{result.name}</li>
-        ))}
-      </ul>
-    )}
+import React, { useState } from "react";
 
-    {searchResults?.length === 0 && !isLoading && (
-      <p className="text-gray-500">No results found.</p>
-    )}
-  </div>
-);
+const Search = ({ onSearch, placeholder }) => {
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  return (
+    <div className="my-4">
+      <input
+        type="text"
+        placeholder={placeholder}
+        className="p-2 border rounded w-80"
+        value={searchInput}
+        onChange={handleSearchChange}
+      />
+      <button
+        className="ml-2 p-2 bg-blue-500 text-white rounded"
+        onClick={() => onSearch(searchInput)}
+      >
+        Search
+      </button>
+    </div>
+  );
+};
 
 export default Search;
