@@ -6,7 +6,8 @@ import DetailBusiness from "./pages/detail_business";
 import ListBusiness from "./pages/list_business";
 
 const App = () => {
-  axios.defaults.baseURL = "https://api.yelp.com/v3/businesses/";
+  axios.defaults.baseURL =
+    "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/";
 
   return (
     <BrowserRouter>
